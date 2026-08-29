@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -13,9 +13,10 @@
 
     body {
       overflow: hidden;
-      background-color: #030008;
-      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #020005;
+      font-family: 'Poppins', sans-serif;
       color: #fff;
+      user-select: none;
     }
 
     #webgl-canvas {
@@ -27,124 +28,64 @@
       z-index: 1;
     }
 
-    .ui-container {
+    /* Interfaz superpuesta limpia */
+    .overlay-ui {
       position: fixed;
-      top: 50%;
+      bottom: 40px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       z-index: 10;
-      width: 90%;
-      max-width: 420px;
       text-align: center;
-      background: rgba(18, 10, 32, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 2rem 1.6rem;
-      border-radius: 28px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
-                  inset 0 0 15px rgba(255, 255, 255, 0.05);
+      width: 90%;
+      max-width: 400px;
       pointer-events: auto;
     }
 
-    /* Marco para mostrar tus fotos dentro de la tarjeta */
-    .photo-display {
+    .title-header {
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      text-align: center;
       width: 100%;
-      height: 240px;
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 1.2rem;
-      border: 2px solid rgba(244, 114, 182, 0.4);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-      position: relative;
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .photo-display img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .photo-display img.active {
-      opacity: 1;
+      pointer-events: none;
     }
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
       background: linear-gradient(135deg, #e9d5ff 0%, #f472b6 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.2rem;
-      text-shadow: 0 0 25px rgba(192, 132, 252, 0.3);
+      text-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+      margin-bottom: 4px;
     }
 
     p.subtitle {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 2px;
-      color: #94a3b8;
+      letter-spacing: 3px;
+      color: #a78bfa;
       text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .message-box {
-      min-height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.2rem;
-      padding: 10px 15px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 16px;
-    }
-
-    .phrase {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #ffffff;
-      line-height: 1.4;
-      opacity: 0;
-      transform: translateY(12px) scale(0.98);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .phrase.active {
-      opacity: 1;
-      transform: translateY(0) scale(1);
     }
 
     .btn {
-      position: relative;
       background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
       color: #fff;
       border: none;
-      padding: 14px 30px;
-      font-size: 0.9rem;
+      padding: 16px 36px;
+      font-size: 1rem;
       font-weight: 600;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
-      transition: all 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
+      transition: all 0.2s ease;
       outline: none;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(236, 72, 153, 0.6);
-    }
-
     .btn:active {
-      transform: translateY(1px) scale(0.97);
+      transform: scale(0.94);
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -154,109 +95,61 @@
 
   <canvas id="webgl-canvas"></canvas>
 
-  <div class="ui-container">
+  <div class="title-header">
     <h1>Eres mi Universo</h1>
     <p class="subtitle">JISLEIDY ❤️</p>
+  </div>
 
-    <!-- Visualizador de Fotos -->
-    <div class="photo-display">
-      <img id="currentPhoto" src="https://files.catbox.moe/1ghstq.jpg" class="active" alt="Nuestra Foto">
-    </div>
-
-    <div class="message-box">
-      <div id="phrase" class="phrase active">✨ Toca para conocerlo Princesa Hermosa✨</div>
-    </div>
-
-    <button class="btn" id="nextBtn" onclick="nextContent()">
-      <span>▶️ Toca aquí</span>
+  <div class="overlay-ui">
+    <button class="btn" onclick="nextContent()">
+      <span>▶️ Toca aquí Princesa</span>
     </button>
   </div>
 
   <script>
-    // --- 1. GALAXIA ESPIRAL EN MOVIMIENTO 3D ---
+    // --- ESCENA Y CÁMARA 3D ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x020005, 0.015);
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(0, 3, 4.5);
-    camera.lookAt(0, 0, 0);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 10;
 
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const parameters = {
-      count: 70000,
-      size: 0.012,
-      radius: 5.5,
-      branches: 4,
-      spin: 1.2,
-      randomness: 0.5,
-      insideColor: '#f472b6',
-      outsideColor: '#7e22ce'
-    };
+    // --- TÚNEL DE ESTRELLAS EN AVANCE ---
+    const starCount = 8000;
+    const starGeometry = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    const starColors = new Float32Array(starCount * 3);
 
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(parameters.count * 3);
-    const colors = new Float32Array(parameters.count * 3);
+    for (let i = 0; i < starCount; i++) {
+      starPositions[i * 3] = (Math.random() - 0.5) * 80;
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 200;
 
-    const colorInside = new THREE.Color(parameters.insideColor);
-    const colorOutside = new THREE.Color(parameters.outsideColor);
-
-    for (let i = 0; i < parameters.count; i++) {
-      const i3 = i * 3;
-      const radius = Math.random() * parameters.radius;
-      const spinAngle = radius * parameters.spin;
-      const branchAngle = ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
-
-      const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-      const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-      const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-
-      positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-      positions[i3 + 1] = randomY;
-      positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-
-      const mixedColor = colorInside.clone();
-      mixedColor.lerp(colorOutside, radius / parameters.radius);
-
-      colors[i3] = mixedColor.r;
-      colors[i3 + 1] = mixedColor.g;
-      colors[i3 + 2] = mixedColor.b;
+      starColors[i * 3] = 0.8 + Math.random() * 0.2;
+      starColors[i * 3 + 1] = 0.4 + Math.random() * 0.5;
+      starColors[i * 3 + 2] = 1.0;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
 
-    const material = new THREE.PointsMaterial({
-      size: parameters.size,
-      sizeAttenuation: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      vertexColors: true
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.18,
+      vertexColors: true,
+      transparent: true,
+      blending: THREE.AdditiveBlending
     });
 
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
+    const starField = new THREE.Points(starGeometry, starMaterial);
+    scene.add(starField);
 
-    const clock = new THREE.Clock();
-
-    function animate() {
-      const elapsedTime = clock.getElapsedTime();
-      points.rotation.y = elapsedTime * 0.12;
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // --- 2. TUS FOTOS Y FRASES ---
-    const myPhotos = [
+    // --- FOTOS Y FRASES 3D ---
+    const myPhotoUrls = [
       "https://files.catbox.moe/1ghstq.jpg",
       "https://files.catbox.moe/kjgs47.jpg",
       "https://files.catbox.moe/4nfm8a.jpg"
@@ -265,49 +158,121 @@
     const phrases = [
       "T amo Jisleidy ❤️",
       "mi cachetona 🥰",
-      "t amo ❤️",
       "el amor de mi vida 💖",
       "t amito 🥺💕",
       "muak 💋",
-      "Gracias por estar siempre a mi lado cachetona 🥺💗",
-      "Cada estrella en el cielo me recuerda a ti ✨",
-      "Gracias por iluminar mis días más oscuros 🌙",
-      "Eres mi lugar favorito en todo el mundo 🌎",
-      "No hay nadie más especial que tú 💖",
+      "Gracias por estar siempre a mi lado 🥺💗",
+      "Cada estrella me recuerda a ti ✨",
+      "Gracias por iluminar mis días 🌙",
+      "Eres mi lugar favorito 🌎",
       "Tú y yo, contra el universo 🌌",
-      "Te amo más de lo que las palabras pueden decir 💕"
+      "Te amo más de lo que las palabras dicen 💕"
     ];
 
-    let currentIndex = 0;
+    const textureLoader = new THREE.TextureLoader();
+    let photoPlanes = [];
+    let textPlanes = [];
+    let currentStep = 0;
+
+    // Crear canvas con texto en 3D
+    function createTextTexture(text) {
+      const textCanvas = document.createElement('canvas');
+      textCanvas.width = 1024;
+      textCanvas.height = 256;
+      const ctx = textCanvas.getContext('2d');
+      ctx.clearRect(0, 0, 1024, 256);
+      
+      ctx.font = 'Bold 48px Poppins, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#ec4899';
+      ctx.shadowBlur = 15;
+      ctx.fillText(text, 512, 140);
+
+      const texture = new THREE.CanvasTexture(textCanvas);
+      return texture;
+    }
+
+    // Crear objeto 3D para cada foto + texto
+    myPhotoUrls.forEach((url, index) => {
+      textureLoader.load(url, (texture) => {
+        // Marco de la foto en 3D
+        const geometry = new THREE.PlaneGeometry(3.6, 4.8);
+        const material = new THREE.MeshBasicMaterial({
+          map: texture,
+          side: THREE.DoubleSide,
+          transparent: true
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0, 0.5, - (index * 25));
+        scene.add(mesh);
+        photoPlanes.push(mesh);
+
+        // Texto 3D asociado
+        const textTex = createTextTexture(phrases[index % phrases.length]);
+        const textGeo = new THREE.PlaneGeometry(6, 1.5);
+        const textMat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true });
+        const textMesh = new THREE.Mesh(textGeo, textMat);
+        textMesh.position.set(0, -2.5, - (index * 25));
+        scene.add(textMesh);
+        textPlanes.push(textMesh);
+      });
+    });
+
+    // --- ANIMACIÓN Y AVANCE CONTINUO ---
+    let speed = 0.08;
+    let targetZ = 10;
     const audio = new Audio("https://files.catbox.moe/0pw6tv.mp3");
     audio.loop = true;
     let isPlaying = false;
 
-    function nextContent() {
-      const phraseEl = document.getElementById('phrase');
-      const photoEl = document.getElementById('currentPhoto');
+    function animate() {
+      requestAnimationFrame(animate);
 
-      // Iniciar reproducción de música en el primer toque
+      // Mover estrellas hacia la cámara (Efecto túnel/avance)
+      const positions = starGeometry.attributes.position.array;
+      for (let i = 0; i < starCount; i++) {
+        positions[i * 3 + 2] += 0.25;
+        if (positions[i * 3 + 2] > 20) {
+          positions[i * 3 + 2] = -180;
+        }
+      }
+      starGeometry.attributes.position.needsUpdate = true;
+
+      // Suave avance de la cámara
+      camera.position.z += (targetZ - camera.position.z) * 0.05;
+      camera.rotation.z += 0.001; // Rotación lenta de la galaxia
+
+      // Rotación suave de las fotos en 3D
+      photoPlanes.forEach((plane, i) => {
+        plane.rotation.y = Math.sin(Date.now() * 0.001 + i) * 0.1;
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Evento al pulsar el botón
+    function nextContent() {
       if (!isPlaying) {
         audio.play().then(() => { isPlaying = true; }).catch(e => console.log(e));
       }
 
-      phraseEl.classList.remove('active');
-      photoEl.classList.remove('active');
+      currentStep++;
+      targetZ = 10 - (currentStep * 25); // Avanzar la cámara hacia la siguiente foto
 
-      setTimeout(() => {
-        // Cambiar frase
-        phraseEl.innerText = phrases[currentIndex % phrases.length];
-        phraseEl.classList.add('active');
-
-        // Cambiar foto
-        photoEl.src = myPhotos[currentIndex % myPhotos.length];
-        photoEl.classList.add('active');
-
-        currentIndex++;
-      }, 300);
+      // Si supera las fotos creadas, volver al inicio
+      if (currentStep >= myPhotoUrls.length) {
+        currentStep = 0;
+        targetZ = 10;
+      }
     }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
-  </html>
-  
+</html>
