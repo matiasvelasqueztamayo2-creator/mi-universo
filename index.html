@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -28,22 +28,9 @@
       z-index: 1;
     }
 
-    /* Interfaz superpuesta limpia */
-    .overlay-ui {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-      pointer-events: auto;
-    }
-
     .title-header {
       position: fixed;
-      top: 30px;
+      top: 25px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
@@ -53,13 +40,13 @@
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 700;
       background: linear-gradient(135deg, #e9d5ff 0%, #f472b6 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     p.subtitle {
@@ -70,12 +57,57 @@
       text-transform: uppercase;
     }
 
+    /* Tarjeta inferior para las Frases */
+    .phrase-container {
+      position: fixed;
+      bottom: 95px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 85%;
+      max-width: 380px;
+      text-align: center;
+      background: rgba(18, 10, 32, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(244, 114, 182, 0.4);
+      padding: 14px 18px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(192, 132, 252, 0.3);
+      pointer-events: none;
+    }
+
+    .phrase-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .phrase-text.fade {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    /* Botón de navegación */
+    .overlay-ui {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      text-align: center;
+      pointer-events: auto;
+    }
+
     .btn {
       background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
       color: #fff;
       border: none;
-      padding: 16px 36px;
-      font-size: 1rem;
+      padding: 14px 34px;
+      font-size: 0.95rem;
       font-weight: 600;
       border-radius: 50px;
       cursor: pointer;
@@ -100,6 +132,10 @@
     <p class="subtitle">JISLEIDY ❤️</p>
   </div>
 
+  <div class="phrase-container">
+    <div id="phraseText" class="phrase-text">✨ Toca para comenzar Princesa Hermosa ✨</div>
+  </div>
+
   <div class="overlay-ui">
     <button class="btn" onclick="nextContent()">
       <span>▶️ Toca aquí Princesa</span>
@@ -110,7 +146,7 @@
     // --- ESCENA Y CÁMARA 3D ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x020005, 0.015);
+    scene.fog = new THREE.FogExp2(0x020005, 0.012);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 10;
@@ -148,7 +184,7 @@
     const starField = new THREE.Points(starGeometry, starMaterial);
     scene.add(starField);
 
-    // --- FOTOS Y FRASES 3D ---
+    // --- FOTOS EN 3D ---
     const myPhotoUrls = [
       "https://files.catbox.moe/1ghstq.jpg",
       "https://files.catbox.moe/kjgs47.jpg",
@@ -158,6 +194,7 @@
     const phrases = [
       "T amo Jisleidy ❤️",
       "mi cachetona 🥰",
+      "t amo ❤️",
       "el amor de mi vida 💖",
       "t amito 🥺💕",
       "muak 💋",
@@ -171,32 +208,11 @@
 
     const textureLoader = new THREE.TextureLoader();
     let photoPlanes = [];
-    let textPlanes = [];
     let currentStep = 0;
 
-    // Crear canvas con texto en 3D
-    function createTextTexture(text) {
-      const textCanvas = document.createElement('canvas');
-      textCanvas.width = 1024;
-      textCanvas.height = 256;
-      const ctx = textCanvas.getContext('2d');
-      ctx.clearRect(0, 0, 1024, 256);
-      
-      ctx.font = 'Bold 48px Poppins, sans-serif';
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.shadowColor = '#ec4899';
-      ctx.shadowBlur = 15;
-      ctx.fillText(text, 512, 140);
-
-      const texture = new THREE.CanvasTexture(textCanvas);
-      return texture;
-    }
-
-    // Crear objeto 3D para cada foto + texto
+    // Crear marcos 3D para tus fotos
     myPhotoUrls.forEach((url, index) => {
       textureLoader.load(url, (texture) => {
-        // Marco de la foto en 3D
         const geometry = new THREE.PlaneGeometry(3.6, 4.8);
         const material = new THREE.MeshBasicMaterial({
           map: texture,
@@ -207,20 +223,10 @@
         mesh.position.set(0, 0.5, - (index * 25));
         scene.add(mesh);
         photoPlanes.push(mesh);
-
-        // Texto 3D asociado
-        const textTex = createTextTexture(phrases[index % phrases.length]);
-        const textGeo = new THREE.PlaneGeometry(6, 1.5);
-        const textMat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true });
-        const textMesh = new THREE.Mesh(textGeo, textMat);
-        textMesh.position.set(0, -2.5, - (index * 25));
-        scene.add(textMesh);
-        textPlanes.push(textMesh);
       });
     });
 
-    // --- ANIMACIÓN Y AVANCE CONTINUO ---
-    let speed = 0.08;
+    // --- ANIMACIÓN ---
     let targetZ = 10;
     const audio = new Audio("https://files.catbox.moe/0pw6tv.mp3");
     audio.loop = true;
@@ -229,7 +235,7 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Mover estrellas hacia la cámara (Efecto túnel/avance)
+      // Movimiento continuo de estrellas
       const positions = starGeometry.attributes.position.array;
       for (let i = 0; i < starCount; i++) {
         positions[i * 3 + 2] += 0.25;
@@ -239,11 +245,11 @@
       }
       starGeometry.attributes.position.needsUpdate = true;
 
-      // Suave avance de la cámara
+      // Avance suave de la cámara
       camera.position.z += (targetZ - camera.position.z) * 0.05;
-      camera.rotation.z += 0.001; // Rotación lenta de la galaxia
+      camera.rotation.z += 0.001;
 
-      // Rotación suave de las fotos en 3D
+      // Leve balanceo en 3D de las fotos
       photoPlanes.forEach((plane, i) => {
         plane.rotation.y = Math.sin(Date.now() * 0.001 + i) * 0.1;
       });
@@ -252,20 +258,26 @@
     }
     animate();
 
-    // Evento al pulsar el botón
+    // Evento del botón
     function nextContent() {
+      const phraseEl = document.getElementById('phraseText');
+
       if (!isPlaying) {
         audio.play().then(() => { isPlaying = true; }).catch(e => console.log(e));
       }
 
-      currentStep++;
-      targetZ = 10 - (currentStep * 25); // Avanzar la cámara hacia la siguiente foto
+      phraseEl.classList.add('fade');
 
-      // Si supera las fotos creadas, volver al inicio
-      if (currentStep >= myPhotoUrls.length) {
-        currentStep = 0;
-        targetZ = 10;
-      }
+      setTimeout(() => {
+        currentStep++;
+        
+        // Cambiar la frase
+        phraseEl.innerText = phrases[(currentStep - 1) % phrases.length];
+        phraseEl.classList.remove('fade');
+
+        // Avanzar la cámara a la siguiente foto 3D
+        targetZ = 10 - ((currentStep - 1) % myPhotoUrls.length) * 25;
+      }, 300);
     }
 
     window.addEventListener('resize', () => {
