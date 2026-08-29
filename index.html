@@ -61,7 +61,6 @@
       overflow: hidden;
       margin-bottom: 12px;
       background: #110826;
-      position: relative;
     }
 
     .photo-wrapper img {
@@ -128,7 +127,7 @@
 
   <div class="card-container">
     <div class="photo-wrapper">
-      <img id="mainPhoto" src="https://files.catbox.moe/1ghstq.jpg" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500'" alt="Foto">
+      <img id="mainPhoto" src="foto1.jpg" alt="Foto Jisleidy">
     </div>
     <div id="mainPhrase" class="phrase-text">✨ Toca para comenzar Princesa ✨</div>
   </div>
@@ -140,7 +139,7 @@
   </div>
 
   <script>
-    // --- ESTRELLAS 3D EN AVANCE INFINITO ---
+    // --- ESTRELLAS EN AVANCE CONTINUO ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x020005, 0.008);
@@ -182,14 +181,14 @@
     }
     animate();
 
-    // --- LISTA DE CONTENIDO ---
+    // --- FOTOS LOCALES Y FRASES ---
     const items = [
-      { url: "https://files.catbox.moe/1ghstq.jpg", text: "T amo Jisleidy ❤️" },
-      { url: "https://files.catbox.moe/kjgs47.jpg", text: "Mi cachetona 🥰" },
-      { url: "https://files.catbox.moe/4nfm8a.jpg", text: "El amor de mi vida 💖" },
-      { url: "https://files.catbox.moe/1ghstq.jpg", text: "Gracias por estar siempre 🥺💗" },
-      { url: "https://files.catbox.moe/kjgs47.jpg", text: "Cada estrella me recuerda a ti ✨" },
-      { url: "https://files.catbox.moe/4nfm8a.jpg", text: "Eres mi lugar favorito 🌎" }
+      { url: "foto1.jpg", text: "T amo Jisleidy ❤️" },
+      { url: "foto2.jpg", text: "Mi cachetona 🥰" },
+      { url: "foto3.jpg", text: "El amor de mi vida 💖" },
+      { url: "foto1.jpg", text: "Gracias por estar siempre 🥺💗" },
+      { url: "foto2.jpg", text: "Cada estrella me recuerda a ti ✨" },
+      { url: "foto3.jpg", text: "Eres mi lugar favorito 🌎" }
     ];
 
     let currentIndex = 0;
