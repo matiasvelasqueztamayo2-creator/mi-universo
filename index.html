@@ -37,18 +37,17 @@
       text-transform: uppercase;
     }
 
-    /* Tarjeta flotante con foto y frase */
     .card-container {
       position: fixed;
-      top: 48%;
+      top: 46%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 5;
       width: 85%;
       max-width: 340px;
-      background: rgba(18, 10, 32, 0.85);
+      background: rgba(18, 10, 32, 0.9);
       border: 3px solid #f472b6;
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 16px;
       text-align: center;
       box-shadow: 0 0 30px rgba(244, 114, 182, 0.4);
@@ -57,23 +56,24 @@
 
     .photo-wrapper {
       width: 100%;
-      height: 280px;
-      border-radius: 12px;
+      height: 270px;
+      border-radius: 14px;
       overflow: hidden;
-      margin-bottom: 14px;
-      background: #000;
+      margin-bottom: 12px;
+      background: #110826;
+      position: relative;
     }
 
     .photo-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
 
     .photo-wrapper img.fade, .phrase-text.fade {
       opacity: 0;
-      transform: scale(0.95);
     }
 
     .phrase-text {
@@ -81,7 +81,7 @@
       font-weight: 600;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(244, 114, 182, 0.6);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transition: opacity 0.3s ease;
       min-height: 48px;
       display: flex;
       align-items: center;
@@ -90,7 +90,7 @@
 
     .overlay-ui {
       position: fixed;
-      bottom: 35px;
+      bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
@@ -128,7 +128,7 @@
 
   <div class="card-container">
     <div class="photo-wrapper">
-      <img id="mainPhoto" src="https://files.catbox.moe/1ghstq.jpg" alt="Foto">
+      <img id="mainPhoto" src="https://files.catbox.moe/1ghstq.jpg" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500'" alt="Foto">
     </div>
     <div id="mainPhrase" class="phrase-text">✨ Toca para comenzar Princesa ✨</div>
   </div>
@@ -140,7 +140,7 @@
   </div>
 
   <script>
-    // --- FONDO 3D DE ESTRELLAS EN AVANCE ---
+    // --- ESTRELLAS 3D EN AVANCE INFINITO ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x020005, 0.008);
@@ -168,7 +168,6 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Mover estrellas hacia el espectador (efecto hipervelocidad)
       const positions = starGeometry.attributes.position.array;
       for (let i = 0; i < starCount; i++) {
         positions[i * 3 + 2] += 0.4;
@@ -183,7 +182,7 @@
     }
     animate();
 
-    // --- LÓGICA DE FOTOS Y FRASES ---
+    // --- LISTA DE CONTENIDO ---
     const items = [
       { url: "https://files.catbox.moe/1ghstq.jpg", text: "T amo Jisleidy ❤️" },
       { url: "https://files.catbox.moe/kjgs47.jpg", text: "Mi cachetona 🥰" },
