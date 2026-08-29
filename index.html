@@ -37,6 +37,57 @@
       text-transform: uppercase;
     }
 
+    /* Tarjeta flotante con foto y frase */
+    .card-container {
+      position: fixed;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      width: 85%;
+      max-width: 340px;
+      background: rgba(18, 10, 32, 0.85);
+      border: 3px solid #f472b6;
+      border-radius: 20px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(244, 114, 182, 0.4);
+      pointer-events: none;
+    }
+
+    .photo-wrapper {
+      width: 100%;
+      height: 280px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: #000;
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .photo-wrapper img.fade, .phrase-text.fade {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .phrase-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(244, 114, 182, 0.6);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .overlay-ui {
       position: fixed;
       bottom: 35px;
@@ -75,36 +126,33 @@
     <p class="subtitle">JISLEIDY ❤️</p>
   </div>
 
+  <div class="card-container">
+    <div class="photo-wrapper">
+      <img id="mainPhoto" src="https://files.catbox.moe/1ghstq.jpg" alt="Foto">
+    </div>
+    <div id="mainPhrase" class="phrase-text">✨ Toca para comenzar Princesa ✨</div>
+  </div>
+
   <div class="overlay-ui">
     <button class="btn" onclick="nextContent()">
       <span>▶️ Toca aquí Princesa</span>
     </button>
   </div>
 
-  <div style="display:none;">
-    <img id="img0" src="https://files.catbox.moe/1ghstq.jpg" crossorigin="anonymous">
-    <img id="img1" src="https://files.catbox.moe/kjgs47.jpg" crossorigin="anonymous">
-    <img id="img2" src="https://files.catbox.moe/4nfm8a.jpg" crossorigin="anonymous">
-  </div>
-
   <script>
+    // --- FONDO 3D DE ESTRELLAS EN AVANCE ---
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x020005, 0.01);
+    scene.fog = new THREE.FogExp2(0x020005, 0.008);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 10;
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // GRUPO GLOBAL: Estrellas + Fotos + Texto avanzan juntos
-    const universeGroup = new THREE.Group();
-    scene.add(universeGroup);
-
-    // --- TÚNEL DE ESTRELLAS ---
-    const starCount = 6000;
+    const starCount = 7000;
     const starGeometry = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount; i++) {
@@ -115,102 +163,62 @@
     starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
     const starMaterial = new THREE.PointsMaterial({ size: 0.22, color: 0xe0aaff, transparent: true });
     const starField = new THREE.Points(starGeometry, starMaterial);
-    universeGroup.add(starField);
-
-    // --- CONTENIDO 3D (FOTO + FRASE UNIDAS) ---
-    const items = [
-      { imgId: "img0", text: "T amo Jisleidy ❤️" },
-      { imgId: "img1", text: "Mi cachetona 🥰" },
-      { imgId: "img2", text: "El amor de mi vida 💖" },
-      { imgId: "img0", text: "Gracias por estar siempre 🥺💗" },
-      { imgId: "img1", text: "Cada estrella me recuerda a ti ✨" },
-      { imgId: "img2", text: "Eres mi lugar favorito 🌎" }
-    ];
-
-    const cardsList = [];
-
-    function generateTexture(imgElement, phrase) {
-      const c = document.createElement('canvas');
-      c.width = 512;
-      c.height = 700;
-      const ctx = c.getContext('2d');
-
-      // Marco
-      ctx.fillStyle = "rgba(18, 10, 32, 0.9)";
-      ctx.fillRect(0, 0, 512, 700);
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = "#f472b6";
-      ctx.strokeRect(5, 5, 502, 690);
-
-      // Dibujar imagen
-      try {
-        ctx.drawImage(imgElement, 30, 30, 452, 500);
-      } catch (e) {
-        ctx.fillStyle = "#8b5cf6";
-        ctx.fillRect(30, 30, 452, 500);
-      }
-
-      // Texto
-      ctx.font = "Bold 32px Poppins, sans-serif";
-      ctx.fillStyle = "#ffffff";
-      ctx.textAlign = "center";
-      ctx.shadowColor = "#f472b6";
-      ctx.shadowBlur = 12;
-      ctx.fillText(phrase, 256, 615);
-
-      return new THREE.CanvasTexture(c);
-    }
-
-    // Esperar carga de imágenes y construir objetos
-    window.addEventListener('load', () => {
-      items.forEach((item, index) => {
-        const imgEl = document.getElementById(item.imgId);
-        const texture = generateTexture(imgEl, item.text);
-
-        const geo = new THREE.PlaneGeometry(4, 5.5);
-        const mat = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide });
-        const cardMesh = new THREE.Mesh(geo, mat);
-
-        // Posicionar a lo largo del túnel
-        cardMesh.position.set(0, 0, - (index * 30));
-        universeGroup.add(cardMesh);
-        cardsList.push(cardMesh);
-      });
-    });
-
-    // --- ANIMACIÓN ---
-    let targetZ = 0;
-    let currentStep = 0;
-    const audio = new Audio("https://files.catbox.moe/0pw6tv.mp3");
-    audio.loop = true;
-    let isPlaying = false;
+    scene.add(starField);
 
     function animate() {
       requestAnimationFrame(animate);
 
-      // Hace que todo el universo (estrellas + imágenes + frases) se desplace hacia adelante
-      universeGroup.position.z += (targetZ - universeGroup.position.z) * 0.05;
-
-      // Rotación suave individual de cada marco en 3D
-      cardsList.forEach((card, i) => {
-        card.rotation.y = Math.sin(Date.now() * 0.0015 + i) * 0.1;
-      });
+      // Mover estrellas hacia el espectador (efecto hipervelocidad)
+      const positions = starGeometry.attributes.position.array;
+      for (let i = 0; i < starCount; i++) {
+        positions[i * 3 + 2] += 0.4;
+        if (positions[i * 3 + 2] > 20) {
+          positions[i * 3 + 2] = -280;
+        }
+      }
+      starGeometry.attributes.position.needsUpdate = true;
+      starField.rotation.z += 0.0008;
 
       renderer.render(scene, camera);
     }
     animate();
 
+    // --- LÓGICA DE FOTOS Y FRASES ---
+    const items = [
+      { url: "https://files.catbox.moe/1ghstq.jpg", text: "T amo Jisleidy ❤️" },
+      { url: "https://files.catbox.moe/kjgs47.jpg", text: "Mi cachetona 🥰" },
+      { url: "https://files.catbox.moe/4nfm8a.jpg", text: "El amor de mi vida 💖" },
+      { url: "https://files.catbox.moe/1ghstq.jpg", text: "Gracias por estar siempre 🥺💗" },
+      { url: "https://files.catbox.moe/kjgs47.jpg", text: "Cada estrella me recuerda a ti ✨" },
+      { url: "https://files.catbox.moe/4nfm8a.jpg", text: "Eres mi lugar favorito 🌎" }
+    ];
+
+    let currentIndex = 0;
+    const audio = new Audio("https://files.catbox.moe/0pw6tv.mp3");
+    audio.loop = true;
+    let isPlaying = false;
+
     function nextContent() {
+      const imgEl = document.getElementById('mainPhoto');
+      const textEl = document.getElementById('mainPhrase');
+
       if (!isPlaying) {
         audio.play().then(() => { isPlaying = true; }).catch(e => console.log(e));
       }
 
-      currentStep++;
-      if (currentStep >= items.length) {
-        currentStep = 0;
-      }
-      // Avance hacia el siguiente objeto en 3D
-      targetZ = currentStep * 30;
+      imgEl.classList.add('fade');
+      textEl.classList.add('fade');
+
+      setTimeout(() => {
+        const item = items[currentIndex % items.length];
+        imgEl.src = item.url;
+        textEl.innerText = item.text;
+
+        imgEl.classList.remove('fade');
+        textEl.classList.remove('fade');
+
+        currentIndex++;
+      }, 300);
     }
 
     window.addEventListener('resize', () => {
