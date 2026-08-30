@@ -3,55 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arcade Level: Jisleidy & Jay</title>
+  <title>Arcade Level: Us</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* FONDO DE DÍA: Cielo azul, nubes y árboles en píxeles */
     body {
       font-family: 'Press Start 2P', cursive;
-      /* FONDO: Bosque nocturno en Pixel Art con degradado */
-      background: linear-gradient(to bottom, rgba(15, 12, 41, 0.85), rgba(48, 43, 99, 0.85)),
-                  url('https://i.imgur.com/8Q9Z5bX.png') center/cover no-repeat;
-      background-color: #0f0c29;
+      background: linear-gradient(to bottom, #70c5ce 0%, #a0e0ff 65%, #55aa44 65%, #338822 100%);
       color: #333;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 15px;
+      position: relative;
       overflow-x: hidden;
+    }
+
+    /* Nubes pixeladas de fondo */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 10%;
+      width: 120px;
+      height: 30px;
+      background: #ffffff;
+      box-shadow: 160px 40px 0 #ffffff, 320px -10px 0 #ffffff;
+      opacity: 0.8;
     }
 
     .arcade-container {
       width: 100%;
-      max-width: 650px;
-      min-height: 550px;
-      background-color: #ffeaa7;
-      border: 8px solid #ff0055;
-      border-radius: 20px;
-      box-shadow: 0 10px 0 #990033, 0 0 25px rgba(255, 0, 85, 0.5);
-      padding: 25px;
+      max-width: 500px;
+      min-height: 520px;
+      background-color: #fff8dc;
+      border: 6px solid #ff0055;
+      border-radius: 15px;
+      box-shadow: 0 8px 0 #990033, 0 10px 20px rgba(0,0,0,0.3);
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       position: relative;
+      z-index: 2;
     }
 
     .arcade-header-text {
       position: absolute;
-      top: 12px;
-      left: 15px;
-      font-size: 0.5rem;
-      color: #d63031;
+      top: 10px;
+      left: 12px;
+      font-size: 0.45rem;
+      color: #ff0055;
     }
     .arcade-score-text {
       position: absolute;
-      top: 12px;
-      right: 15px;
-      font-size: 0.5rem;
-      color: #d63031;
+      top: 10px;
+      right: 12px;
+      font-size: 0.45rem;
+      color: #ff0055;
     }
 
     .screen {
@@ -69,61 +82,104 @@
 
     h1 {
       color: #ff0055;
-      text-shadow: 2px 2px 0px #fff, 4px 4px 0px #fdcb6e;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 15px;
+      text-shadow: 2px 2px 0px #fff, 3px 3px 0px #ffcc00;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin-bottom: 10px;
     }
 
-    /* --- ANIMACIÓN DE SPRITES (Catbox PNG) --- */
-    .sprites-stage {
-      width: 300px;
-      height: 250px;
-      background-image: url('https://files.catbox.moe/3vtta8.png');
-      background-repeat: no-repeat;
-      background-position: 0 0;
-      animation: playSprite 2s steps(4) infinite;
-      image-rendering: pixelated;
-      margin: 10px 0;
-    }
-
-    @keyframes playSprite {
-      from { background-position: 0 0; }
-      to { background-position: -1200px 0; }
-    }
-
-    /* --- GALERÍA Y CONTENIDOS --- */
-    .gallery {
+    /* --- MUÑECOS PIXELADOS EN CÓDIGO (ANIMADOS) --- */
+    .pixel-couple {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      align-items: center;
       justify-content: center;
+      gap: 15px;
       margin: 15px 0;
-      max-height: 300px;
-      overflow-y: auto;
     }
 
-    .photo-card {
-      background-color: #fff;
-      border: 3px solid #000;
-      padding: 5px;
-      box-shadow: 3px 3px 0 #fdcb6e;
-      width: 110px;
+    .pixel-char {
+      width: 60px;
+      height: 80px;
+      position: relative;
+      animation: bounce 0.8s infinite alternate ease-in-out;
     }
 
-    .photo-card img {
+    .pixel-char.girl {
+      animation-delay: 0.2s;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    /* Dibujo pixel de él (Jay) */
+    .boy-avatar {
       width: 100%;
-      height: 100px;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 50% 25%, #4a2c11 35%, transparent 36%),
+        radial-gradient(circle at 50% 45%, #ffdbac 30%, transparent 31%),
+        linear-gradient(#222, #222);
+      background-size: 100% 40%, 100% 40%, 70% 40%;
+      background-position: top, center, bottom;
+      background-repeat: no-repeat;
+      border-radius: 8px;
+      border: 2px solid #000;
+    }
+
+    /* Dibujo pixel de ella (Jisleidy con tiara) */
+    .girl-avatar {
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(to right, transparent 30%, #ffd700 30%, #ffd700 70%, transparent 70%),
+        radial-gradient(circle at 50% 30%, #1a1a1a 40%, transparent 41%),
+        radial-gradient(circle at 50% 50%, #ffdbac 30%, transparent 31%),
+        linear-gradient(#ff0055, #ff0055);
+      background-size: 50% 12%, 100% 45%, 100% 40%, 70% 35%;
+      background-position: top 2px center, top, center, bottom;
+      background-repeat: no-repeat;
+      border-radius: 8px;
+      border: 2px solid #000;
+    }
+
+    .heart-icon {
+      font-size: 1.2rem;
+      animation: pulse 0.6s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(0.9); }
+      to { transform: scale(1.3); }
+    }
+
+    /* --- FOTO DE GALERÍA --- */
+    .photo-frame {
+      background-color: #fff;
+      border: 4px solid #000;
+      padding: 6px;
+      box-shadow: 4px 4px 0 #ff9900;
+      width: 80%;
+      max-width: 260px;
+      margin: 15px 0;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: auto;
+      max-height: 250px;
       object-fit: cover;
-      border: 1px solid #000;
+      border: 2px solid #000;
+      display: block;
     }
 
     .text-box {
       background-color: #ffffff;
       border: 4px solid #000;
-      padding: 20px;
+      padding: 15px;
       box-shadow: 4px 4px 0 #74b9ff;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       line-height: 1.8;
       color: #222;
       width: 100%;
@@ -134,46 +190,51 @@
     .btn-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
       align-items: center;
     }
 
     .arcade-btn {
-      background-color: #fdcb6e;
+      background-color: #ffcc00;
       color: #000;
-      border: 4px solid #000;
-      padding: 12px 18px;
+      border: 3px solid #000;
+      padding: 12px 15px;
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       cursor: pointer;
-      box-shadow: 0 5px 0 #e1b12c;
-      width: 85%;
-      transition: transform 0.1s;
+      box-shadow: 0 4px 0 #c79e00;
+      width: 90%;
     }
 
     .arcade-btn:active {
-      box-shadow: 0 0 0 #e1b12c;
-      transform: translateY(5px);
+      box-shadow: 0 0 0 #c79e00;
+      transform: translateY(4px);
     }
 
     .arcade-btn.btn-no {
       background-color: #ff7675;
       color: #fff;
-      box-shadow: 0 5px 0 #d63031;
+      box-shadow: 0 4px 0 #d63031;
     }
   </style>
 </head>
 <body>
 
   <div class="arcade-container">
-    <div class="arcade-header-text">INSERT COIN</div>
-    <div class="arcade-score-text">HI-SCORE: 99999</div>
+    <div class="arcade-header-text">PRESS START</div>
+    <div class="arcade-score-text">SCORE: 99999</div>
 
+    <!-- PANTALLA 1: Inicio -->
     <div id="screen1" class="screen active">
-      <h1>Sandía 180.<br>Besamor a 160.<br>¿Quieres seguir viendo todo lo que siento por ti?</h1>
+      <h1>¿Quieres seguir viendo todo lo que siento por ti? ❤️</h1>
       
-      <div class="sprites-stage"></div>
+      <!-- Muñecos animados en píxeles -->
+      <div class="pixel-couple">
+        <div class="pixel-char"><div class="girl-avatar"></div></div>
+        <div class="heart-icon">💖</div>
+        <div class="pixel-char girl"><div class="boy-avatar"></div></div>
+      </div>
 
       <div class="btn-group">
         <button class="arcade-btn" onclick="goToScreen(3)">Sí, sí, sí quiero</button>
@@ -181,34 +242,41 @@
       </div>
     </div>
 
+    <!-- PANTALLA 2: Si presiona NO -->
     <div id="screen2" class="screen">
       <h1>Por favor, dale que sí 🥺❤️</h1>
       <div class="text-box">
-        <p>¡Esa opción está bloqueada en este juego!</p>
+        <p>¡Esa opción no está permitida!</p>
       </div>
       <button class="arcade-btn" onclick="goToScreen(1)">Está bien</button>
     </div>
 
+    <!-- PANTALLA 3: Fotos -->
     <div id="screen3" class="screen">
       <h1>STAGE 2: NUESTROS MOMENTOS</h1>
-      <div class="gallery">
-        <div class="photo-card"><img src="https://files.catbox.moe/buq98m.jpg" alt="Foto 1"></div>
-        <div class="photo-card"><img src="https://files.catbox.moe/kjgs47.jpg" alt="Foto 2"></div>
-        <div class="photo-card"><img src="https://files.catbox.moe/1ghstq.jpg" alt="Foto 3"></div>
+
+      <div class="photo-frame">
+        <img src="https://files.catbox.moe/buq98m.jpg" alt="Nosotros">
       </div>
+
       <button class="arcade-btn" onclick="goToScreen(4)">Dale clic aquí ➔</button>
     </div>
 
+    <!-- PANTALLA 4: Carta Final -->
     <div id="screen4" class="screen">
       <h1>LEVEL CLEAR! 🏆</h1>
       
-      <div class="sprites-stage" style="transform: scale(0.85); margin: 0;"></div>
-
-      <div class="text-box">
-        <p>Eres la persona más increíble de todas. Gracias por compartir cada nivel de la vida a mi lado. ¡Te amo muchísimo, Jisleidy! ❤️✨</p>
+      <div class="pixel-couple">
+        <div class="pixel-char"><div class="girl-avatar"></div></div>
+        <div class="heart-icon">👑</div>
+        <div class="pixel-char girl"><div class="boy-avatar"></div></div>
       </div>
 
-      <button class="arcade-btn" onclick="goToScreen(1)">🔄 REINICIAR ARCADES</button>
+      <div class="text-box">
+        <p>Eres la persona más increíble de todas. Gracias por compartir cada nivel de la vida a mi lado. ¡Te amo muchísimo! ❤️✨</p>
+      </div>
+
+      <button class="arcade-btn" onclick="goToScreen(1)">🔄 REINICIAR</button>
     </div>
 
   </div>
