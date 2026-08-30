@@ -8,32 +8,59 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* FONDO: Bosque Pixel Art de día con cielo y árboles */
+    /* FONDO DE DÍA */
     body {
       font-family: 'Press Start 2P', cursive;
-      background: url('https://i.imgur.com/vH0M16R.png') center/cover no-repeat fixed;
-      background-color: #70c5ce;
+      background: linear-gradient(to bottom, #70c5ce 0%, #a0e0ff 50%, #62c347 50%, #3d8c28 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 15px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* NUBES */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 25px;
+      left: 10%;
+      width: 100px;
+      height: 25px;
+      background: #ffffff;
+      box-shadow: 180px 40px 0 #ffffff, 340px -10px 0 #ffffff;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    /* ÁRBOLES PIXELADOS */
+    body::after {
+      content: "🌲 🌳 🌲 🌳 🌲 🌳 🌲";
+      position: absolute;
+      bottom: 12px;
+      font-size: 1.8rem;
+      letter-spacing: 12px;
+      opacity: 0.8;
+      pointer-events: none;
     }
 
     .arcade-container {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       min-height: 500px;
-      background-color: rgba(255, 248, 220, 0.95);
+      background-color: #fff9e6;
       border: 6px solid #ff0055;
       border-radius: 15px;
-      box-shadow: 0 8px 0 #990033, 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 0 #990033, 0 10px 25px rgba(0,0,0,0.35);
       padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       position: relative;
+      z-index: 10;
     }
 
     .screen {
@@ -50,15 +77,35 @@
 
     h1 {
       color: #ff0055;
-      text-shadow: 2px 2px 0px #fff, 3px 3px 0px #ffcc00;
+      text-shadow: 2px 2px 0px #fff;
       font-size: 0.75rem;
       line-height: 1.6;
       margin-bottom: 15px;
     }
 
-    /* MUÑECOS (Imagen Sprite de Catbox) */
+    /* FOTO DE PORTADA JUNTOS */
+    .hero-photo-frame {
+      width: 100%;
+      max-width: 250px;
+      border: 4px solid #000;
+      box-shadow: 4px 4px 0 #ff0055;
+      margin: 10px 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hero-photo-frame img {
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* MUÑECOS PIXEL */
     .sprite-img {
-      width: 180px;
+      width: 160px;
       height: auto;
       max-height: 160px;
       object-fit: contain;
@@ -66,16 +113,14 @@
       margin: 10px 0;
     }
 
-    /* GALERÍA DE FOTOS (Tus enlaces de Catbox) */
     .gallery {
       display: flex;
       flex-direction: column;
       gap: 12px;
       align-items: center;
       width: 100%;
-      max-height: 320px;
+      max-height: 290px;
       overflow-y: auto;
-      padding: 5px;
     }
 
     .photo-card {
@@ -97,13 +142,13 @@
     .text-box {
       background-color: #ffffff;
       border: 4px solid #000;
-      padding: 15px;
+      padding: 12px;
       box-shadow: 4px 4px 0 #74b9ff;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       line-height: 1.8;
       color: #222;
       width: 100%;
-      margin: 15px 0;
+      margin: 10px 0;
     }
 
     .btn-group {
@@ -146,8 +191,9 @@
     <div id="screen1" class="screen active">
       <h1>¿Quieres seguir viendo todo lo que siento por ti? ❤️</h1>
       
-      <!-- Muñecos en Píxeles -->
-      <img class="sprite-img" src="https://files.catbox.moe/3vtta8.png" alt="Muñecos Pixel">
+      <div class="hero-photo-frame">
+        <img src="Screenshot_20260829-foto4.png" alt="Nosotros">
+      </div>
 
       <div class="btn-group">
         <button class="arcade-btn" onclick="goToScreen(3)">Sí, sí, sí quiero</button>
@@ -164,27 +210,28 @@
       <button class="arcade-btn" onclick="goToScreen(1)">Está bien</button>
     </div>
 
-    <!-- PANTALLA 3: GALERÍA DE FOTOS -->
+    <!-- PANTALLA 3: GALERÍA DE FOTOS REALES -->
     <div id="screen3" class="screen">
       <h1>NUESTROS MOMENTOS ✨</h1>
 
       <div class="gallery">
-        <div class="photo-card"><img src="https://files.catbox.moe/buq98m.jpg" alt="Foto 1"></div>
-        <div class="photo-card"><img src="https://files.catbox.moe/kjgs47.jpg" alt="Foto 2"></div>
-        <div class="photo-card"><img src="https://files.catbox.moe/1ghstq.jpg" alt="Foto 3"></div>
+        <div class="photo-card"><img src="Screenshot_20260829-foto4.png" alt="Foto Juntos"></div>
+        <div class="photo-card"><img src="IMG-20260828-foto1.jpg" alt="Foto 1"></div>
+        <div class="photo-card"><img src="IMG-20260827-foto2.jpg" alt="Foto 2"></div>
+        <div class="photo-card"><img src="motion_photo_foto3.jpg" alt="Foto 3"></div>
       </div>
 
       <button class="arcade-btn" style="margin-top: 10px;" onclick="goToScreen(4)">Ver carta final ➔</button>
     </div>
 
-    <!-- PANTALLA 4 -->
+    <!-- PANTALLA 4: FINAL CON TUS MUÑECOS PIXEL DE GITHUB -->
     <div id="screen4" class="screen">
       <h1>LEVEL CLEAR! 🏆</h1>
       
-      <img class="sprite-img" src="https://files.catbox.moe/3vtta8.png" alt="Muñecos Pixel">
+      <img class="sprite-img" src="sprite.png" alt="Muñecos Pixel">
 
       <div class="text-box">
-        <p>Eres la persona más increíble de todas. Gracias por compartir cada momento a mi lado. ¡Te amo muchísimo! ❤️✨</p>
+        <p>Eres la persona más increíble de todas. Gracias por compartir cada momento a mi lado. ¡Te amo muchísimo, Jisleidy! ❤️✨</p>
       </div>
 
       <button class="arcade-btn" onclick="goToScreen(1)">🔄 REINICIAR</button>
